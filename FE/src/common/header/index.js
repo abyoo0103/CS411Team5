@@ -103,7 +103,9 @@ class Header extends Component {
 							Profile
 						</Button>
 					</Link>
+          <Link to='/register'>
 					<Button className='reg'>Register</Button>
+          </Link>
 				</Addition>
 			</HeaderWrapper>
 		);
