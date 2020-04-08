@@ -10,6 +10,7 @@ import Register from './pages/register';
 import Write from './pages/write';
 import store from './store';
 
+
 class App extends Component {
   render() {
     return (
