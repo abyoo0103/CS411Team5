@@ -18,7 +18,7 @@ export const login = (accout, password) => {
 			if (result) {
 				dispatch(changeLogin())
 			}else {
-				alert('登陆失败')
+				alert('failed, please register')
 			}
 		})
 	}

@@ -7,7 +7,7 @@ class Write extends PureComponent {
 		const { loginStatus } = this.props;
 		if (loginStatus) {
 			return (
-				<div>写文章页面</div>
+				<div>blank space</div>
 			)
 		}else {
 			return <Redirect to='/login'/>

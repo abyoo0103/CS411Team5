@@ -61,7 +61,7 @@ class Header extends Component {
 	}
 
 	render() {
-		const { focused, handleInputFocus, handleInputBlur, list, login, logout } = this.props;
+		const { focused, handleInputFocus, handleInputBlur, list, login, logout} = this.props;
 		return (
 			<HeaderWrapper>
 				<Link to='/'>
