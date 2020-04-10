@@ -1,0 +1,17 @@
+hey guys youll be reading this while i am probably asleep
+i converted the database into something usable and have filled it with a little bit 
+of random data.
+
+the nodes.js is the only script that we need to be able to run everything
+but i will need some help updating the index.js for each of the particular 
+things that we need to do. rn i have to manually type in the urls 
+
+what we need to do its run this command onclick -- i am struggling to understand
+how to keep functionality while adding this.
+
+command:
+fetch(https://localhost:3000/register/add?username=____user_username____&password=___our_password____
+
+this is the hard part of it. in the messenger ill send the youtube video i used to kind of understand what to do and that should make it a little easier to understand
+
+the only thing left to do is convert the webpages into something that calls that fetch command that runs the command then returns -- this is how we will update/delete/insert
