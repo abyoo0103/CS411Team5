@@ -20,7 +20,7 @@ class Register extends PureComponent {
 					<LoginBox>
 						<Input placeholder='Enter your account' innerRef={(input) => {this.account = input}}/>
 						<Input placeholder='Enter your password' type='password' innerRef={(input) => {this.password = input}}/>
-            <Link to='/login'><Button onClick={fetch(`localhost:3000/register/add?username=${this.account}&password=${this.password}`)}>Register account</Button></Link>
+            <Link to='/login'><Button onClick={() => this.props.register(this.account, this.password)}>Register account</Button></Link>
 					</LoginBox>
 				</LoginWrapper>
 			)
