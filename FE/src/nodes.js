@@ -47,6 +47,18 @@ apt.get('/write/update', (req, res) => {
 	});
 });
 
+	    
+apt.get('/write/follows', (req, res) => {
+	const {username} = req.query;
+	db.run(`SELECT count(*) FROM Follows NATURAL JOIN Authors GROUP BY author_id=? HAVING author_id=author_id`, 
+	       		username, function(err) {
+	    if (err) {
+		return console.error(err.message);
+	    }
+	    console.log(`Natural Join successful`);
+	});
+});
+
 app.listen(3000, () => {
 	console.log('listening on server');
 });
