@@ -27,24 +27,24 @@ app.get('/register/add', (req, res) => {
 });
 
 app.get('/write/delete', (req, res) => {
-const {username} = req.query;
-db.run(`DELETE FROM Account WHERE username=?`, username, function(err) {
-    if (err) {
-        return console.error(err.message);
-    }
-    console.log(`Row(s) deleted`);
-});
+	const {username} = req.query;
+	db.run(`DELETE FROM Account WHERE username=?`, username, function(err) {
+	    if (err) {
+		return console.error(err.message);
+	    }
+	    console.log(`Row(s) deleted`);
+	});
 });
 
 apt.get('/write/update', (req, res) => {
-const {the_username, new_password} = req.query;
-let data = [the_username, new_password]
-db.run(`UPDATE Account SET password=? WHERE username=?`, data, function(err) {
-    if (err) {
-        return console.error(err.message);
-    }
-    console.log(`Row changed`);
-});
+	const {the_username, new_password} = req.query;
+	let data = [new_password, the_username]
+	db.run(`UPDATE Account SET password=? WHERE username=?`, data, function(err) {
+	    if (err) {
+		return console.error(err.message);
+	    }
+	    console.log(`Row changed`);
+	});
 });
 
 app.listen(3000, () => {
