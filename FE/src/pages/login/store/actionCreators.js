@@ -11,15 +11,20 @@ export const logout = () => ({
 	value: false
 })
 
+const state = {
+  result: []
+}
+
 export const login = (account, password) => {
-	return (dispatch) => {
-		axios.get('/api/login.json?account=' + account + '&password=' + password).then((res) => {
+  return (dispatch) => {
+		axios.get('http://localhost:3000/api/login.json?account=' + account + '&password=' + password).then((res) => {
 			const result = res.data.data;
 			if (result) {
-				dispatch(changeLogin())
+        dispatch(changeLogin())
 			}else {
 				alert('Failed login')
 			}
 		})
 	}
+
 }

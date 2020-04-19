@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { LoginWrapper, LoginBox, Input, Button } from './style';
 import { actionCreators } from './store';
 
+
 class Login extends PureComponent {
 	render() {
 		const { loginStatus } = this.props;

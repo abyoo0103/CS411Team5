@@ -13,8 +13,6 @@ export const logout = () => ({
 
 export const register = (account, password) => {
 	return (dispatch) => {
-		axios.post('/api/login.json?account=' + account + '&password=' + password, {
-      data: 'abcdef'
-    })
+		fetch("http://localhost:3001/register/add?username="+account+"&password="+password)
   }
 }
