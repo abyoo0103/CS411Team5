@@ -1,0 +1,79 @@
+.wrapper {
+    display: flex;
+
+    background-color: #f9f9f9;
+    padding-top: 70px;
+    padding-bottom: 20px;
+    justify-content: center;
+
+    .detail {
+        width: 960px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+
+        .detailLeft {
+            width: 640px;
+            background-color: #fff;
+            padding: 24px;
+
+            .title {
+                font-size: 30px;
+                font-weight: 700;
+                word-break: break-word;
+            }
+
+            .author {
+                padding: 12px 0;
+
+                .authorName {
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: #333;
+                    cursor: pointer;
+                }
+
+                .authorInfo {
+                    font-size: 13px;
+                    color: #969696;
+
+                    >span {
+                        margin-right: 16px;
+                    }
+                }
+            }
+
+            .detailContent {
+                font-size: 16px;
+                color: #404040;
+            }
+        }
+
+        .recommend {
+            width: 280px;
+            background-color: #fff;
+            padding: 24px;
+
+            .header {
+                font-size: 16px;
+                font-weight: 500;
+                color: #333;
+                margin-bottom: 16px;
+            }
+
+            .recommendTitle {
+                font-size: 14px;
+                color: #333;
+                margin-top: 12px;
+                cursor: pointer;
+            }
+
+            .recommendNum {
+                font-size: 12px;
+                color: #969696;
+                margin-bottom: 12px;
+                margin-top: 6px;
+            }
+        }
+    }
+}
