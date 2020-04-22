@@ -1,0 +1,122 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    padding-top: 88px;
+
+    .container {
+        width: 960px;
+        display: flex;
+        justify-content: space-between;
+
+        .containerLeft {
+            width: 640px;
+
+            .article {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px 0;
+                border-bottom: 1px solid #f0f0f0;
+
+                .articleContent {
+                    width: 458px;
+
+                    .articleTitle {
+                        font-size: 18px;
+                        font-weight: 700;
+                        color: #333;
+                        cursor: pointer;
+                    }
+
+                    .articleText {
+                        font-size: 13px;
+                        color: #999;
+                        margin: 10px 0;
+                        position: relative;
+                        line-height: 1.4em;
+                        /* 3 times the line-height to show 3 lines */
+                        height: 4.2em;
+                        overflow: hidden;
+                        z-index: -1;
+                    }
+
+                    .articleText::after {
+                        content: "...";
+                        font-weight: bold;
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                        padding: 0 20px 1px 1px;
+                        background-color: #fff;
+                    }
+
+                    .articleData {
+                        display: flex;
+
+                        >span {
+                            padding-right: 12px;
+                            display: flex;
+                            align-items: center;
+
+                            >img {
+                                width: 14px;
+                                margin-right: 4px;
+
+                            }
+                        }
+                    }
+                }
+
+                >img {
+                    width: 150px;
+                    height: 100px;
+                    border-radius: 4px;
+                }
+            }
+
+            .more {
+                width: 100%;
+                height: 40px;
+                background-color: #a5a5a5;
+                border-radius: 20px;
+                color: #fff;
+                font-size: 15;
+                font-weight: 700;
+                margin-top: 40px;
+                margin-bottom: 60px;
+                border: none;
+                outline: none;
+            }
+        }
+
+        .containerRight {
+            width: 310px;
+
+            .author {
+                padding: 12px;
+
+                .authorName {
+                    font-size: 14px;
+                    color: #333;
+                }
+
+                .authorData {
+                    font-size: 12px;
+                    color: #969696;
+                }
+            }
+
+            .all {
+                width: 100%;
+                border-radius: 4px;
+            }
+
+            .history {
+                margin-top: 10px;
+                font-size: 14px;
+                cursor: pointer;
+                padding-left: 10px;
+            }
+        }
+    }
+}

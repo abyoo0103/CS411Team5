@@ -1,0 +1,105 @@
+.wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: url("../assets/images/bg.jpeg") no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .contentBox {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        bottom: 160px;
+
+        .title {
+            font-size: 38px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .search {
+            width: 711px;
+            height: 55px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+            border: none;
+
+            input {
+                font-size: 24px;
+                color: #333;
+            }
+
+            :global(.ant-input-suffix) {
+                display: flex;
+                align-items: center;
+
+                svg {
+                    width: 30px;
+                    height: 30px;
+                    color: #007DAA;
+                }
+            }
+        }
+    }
+
+    .recommands {
+        position: fixed;
+        bottom: 50px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        >img {
+            width: 40px;
+            margin: 0 16px;
+            cursor: pointer;
+        }
+
+        >img:last-child {
+            transform: rotate(180deg);
+        }
+
+        .recommandList {
+            display: flex;
+            flex-direction: row;
+            width: 1400px;
+            overflow: scroll;
+            justify-content: space-between;
+            overflow-y: hidden;
+            overflow-x: hidden;
+
+            .recommand {
+                margin-right: 16px;
+                position: relative;
+                cursor: pointer;
+            }
+
+            img {
+                width: 186px;
+                border-radius: 6px;
+            }
+
+            p {
+                width: 100%;
+                color: #fff;
+                height: 36px;
+                background-color: #000;
+                position: absolute;
+                top: 0;
+                opacity: 0.6;
+                line-height: 36px;
+                padding: 0 10px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+}
