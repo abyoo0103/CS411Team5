@@ -102,7 +102,7 @@ class TopBar extends Component {
   */
   getAccount = _ => {
     const { signIn } = this.state;
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const proxyurl = "https://cors-anywhere.herokuapp.com/"; //Used to try to bypass CORS block
     const url = `http://localhost:3001/accounts/select?username=${signIn.name}&password=${signIn.password}`;
     return fetch(url).then(response => response.json()).catch(err => console.error(err));
   };
@@ -110,25 +110,17 @@ class TopBar extends Component {
   /**
    * 登录
    */
-  login = () => {
+  login = async () => {
     const { signIn } = this.state;
     if (!signIn.name || !signIn.password) {
       message.error('Please enter an email and password!');
       return;
     }
+
     //Check if username/password is in database
-    const val = Promise.resolve(this.getAccount());
-    if(typeof val.PromiseValue == 'undefined'){
-        message.error('Response was not successful');
-        console.log(typeof val.PromiseValue);
-        console.log(val.PromiseValue);
-        console.log(typeof val);
-        console.log(val);
-        return;
-	}
-    else{
-        message.success('succ');
-        console.log(val)
+    const val = await this.getAccount(); //Gets the value/query  (Uses aynchronous function await)
+    if(typeof val == 'undefined'){
+        message.error('The username or password is incorrect.');
         return;
 	}
 
