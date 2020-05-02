@@ -97,15 +97,41 @@ class TopBar extends Component {
     this.setState({ type });
   };
 
+  /*
+  * Function that calls SELECT_ACCOUNT_QUERY
+  */
+  getAccount = _ => {
+    const { signIn } = this.state;
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = `http://localhost:3001/accounts/select?username=${signIn.name}&password=${signIn.password}`;
+    return fetch(url).then(response => response.json()).catch(err => console.error(err));
+  };
+
   /**
    * 登录
    */
   login = () => {
     const { signIn } = this.state;
     if (!signIn.name || !signIn.password) {
-      message.error('Please enter the correct email or password!');
+      message.error('Please enter an email and password!');
       return;
     }
+    //Check if username/password is in database
+    const val = Promise.resolve(this.getAccount());
+    if(typeof val.PromiseValue == 'undefined'){
+        message.error('Response was not successful');
+        console.log(typeof val.PromiseValue);
+        console.log(val.PromiseValue);
+        console.log(typeof val);
+        console.log(val);
+        return;
+	}
+    else{
+        message.success('succ');
+        console.log(val)
+        return;
+	}
+
     this.setState({
       visible: false,
     });
