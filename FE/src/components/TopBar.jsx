@@ -124,7 +124,7 @@ class TopBar extends Component {
   createAccount = _ => {
     const { signUp } = this.state;
     //const proxyurl = "https://cors-anywhere.herokuapp.com/"; //Used to try to bypass CORS block
-    const url = `http://localhost:3001/accounts/insert?username=${signIn.name}&password=${signIn.password}`;
+    const url = `http://localhost:3001/accounts/insert?username=${signUp.name}&password=${signUp.password}`;
     return fetch(url).then(response => response.json()).catch(err => console.error(err));
   };
 
@@ -157,7 +157,7 @@ class TopBar extends Component {
   /**
    * 注册
    */
-  register = () => {
+  register = async () => {
     const { signUp } = this.state;
     if (!signUp.name || !signUp.password || !signUp.confirmPsw) {
       message.error('Please enter the correct email or password!');
@@ -174,6 +174,8 @@ class TopBar extends Component {
         message.error('This username is already taken. Please choose another username.')
         return;
 	}
+
+    const registerVal = await this.createAccount();
 
     this.setState({
       visible: false,
