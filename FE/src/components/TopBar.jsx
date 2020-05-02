@@ -97,13 +97,34 @@ class TopBar extends Component {
     this.setState({ type });
   };
 
+
   /*
-  * Function that calls SELECT_ACCOUNT_QUERY
+  * Function that calls SELECT_ACCOUNT_QUERY (Used for login function)
   */
   getAccount = _ => {
     const { signIn } = this.state;
-    const proxyurl = "https://cors-anywhere.herokuapp.com/"; //Used to try to bypass CORS block
+    //const proxyurl = "https://cors-anywhere.herokuapp.com/"; //Used to try to bypass CORS block
     const url = `http://localhost:3001/accounts/select?username=${signIn.name}&password=${signIn.password}`;
+    return fetch(url).then(response => response.json()).catch(err => console.error(err));
+  };
+
+  /*
+  * Same as getAccount but used for register function (checks if username exists)
+  */
+  getUser =  _ => {
+    const { signUp } = this.state;
+    //const proxyurl = "https://cors-anywhere.herokuapp.com/"; //Used to try to bypass CORS block
+    const url = `http://localhost:3001/accounts/exists?username=${signUp.name}`;
+    return fetch(url).then(response => response.json()).catch(err => console.error(err));
+  };
+
+  /*
+  * Inserts new account into database (used in register function)
+  */
+  createAccount = _ => {
+    const { signUp } = this.state;
+    //const proxyurl = "https://cors-anywhere.herokuapp.com/"; //Used to try to bypass CORS block
+    const url = `http://localhost:3001/accounts/insert?username=${signIn.name}&password=${signIn.password}`;
     return fetch(url).then(response => response.json()).catch(err => console.error(err));
   };
 
@@ -119,7 +140,7 @@ class TopBar extends Component {
 
     //Check if username/password is in database
     const val = await this.getAccount(); //Gets the value/query  (Uses aynchronous function await)
-    if(typeof val == 'undefined'){
+    if(typeof val === 'undefined'){
         message.error('The username or password is incorrect.');
         return;
 	}
@@ -146,6 +167,14 @@ class TopBar extends Component {
       message.error('The two passwords are different, please re-enter!');
       return;
     }
+
+    //Check if username already exists in database
+    const val = await this.getAccountRegister();
+    if(typeof val !== 'undefined'){
+        message.error('This username is already taken. Please choose another username.')
+        return;
+	}
+
     this.setState({
       visible: false,
     });

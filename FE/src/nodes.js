@@ -29,10 +29,11 @@ app.get('/accounts', (req, res) => {
         });
 });
 
+//Checks if username exists
 app.get('/accounts/exists', (req, res) => {
-	const {username, password} = req.query;
-	const SELECT_ACCOUNT_QUERY = `SELECT EXISTS (SELECT * FROM Account WHERE username='${username}' AND password='${password}')`;
-	db.get(SELECT_ACCOUNT_QUERY, function(err, results) {
+	const {username} = req.query;
+	const SELECT_ACCOUNT_BY_USERNAME_QUERY = `SELECT * FROM Account WHERE username='${username}'`;
+	db.get(SELECT_ACCOUNT_BY_USERNAME_QUERY, function(err, results) {
     console.log(password)
    	 if (err) {
       		return console.log(err.message);
@@ -46,6 +47,7 @@ app.get('/accounts/exists', (req, res) => {
   });
 });
 
+//Selects account (returns username and password)
 app.get('/accounts/select', (req, res) => {
 	const {username, password} = req.query;
 	const SELECT_ACCOUNT_QUERY = `SELECT * FROM Account WHERE username='${username}' AND password='${password}'`;
