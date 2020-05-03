@@ -40,6 +40,12 @@ class Setting extends Component {
     return fetch(url).then(response => response.json()).catch(err => console.error(err));
   };
 
+  deleteUser = _ => {
+    const username = localStorage.getItem('usernameLocalStorage');
+    const url = `http://localhost:3001/accounts/delete?username=${username}`;
+    return fetch(url).then(response => response.json()).catch(err => console.error(err));
+  };
+
   /**
    * 提交密码修改
    * submit password change
@@ -77,6 +83,8 @@ class Setting extends Component {
    * confirm delete account
    */
   delete = () => {
+    window.$isLogin = false;
+    this.deleteUser();
     message.success('The account has been deleted, thank you for your use!');
     this.props.history.push('/home');
   };

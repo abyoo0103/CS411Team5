@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\components"
+    "\\components",
+    "\\pages",
+    "\\pages\\Setting"
   ],
-  "SelectedNode": "\\nodes.js",
+  "SelectedNode": "\\components\\Sign.jsx",
   "PreviewInSolutionExplorer": false
 }
