@@ -98,15 +98,70 @@ app.get('/accounts/update', (req, res) => {
 	    console.log(`Row changed`);
 	});
 });
-	    
-app.get('/write/follows', (req, res) => {
-	const {author_id} = req.query;
-	const FOLLOW_COUNT_QUERY = `SELECT count(*) FROM Follows NATURAL JOIN Authors GROUP BY author_id='${author_id}' HAVING author_id=author_id`;
-	db.run(FOLLOW_COUNT_QUERY, function(err) {
+
+//Displays all authors (author_id and author name)
+app.get('/authors', (req, res) => {
+	const SELECT_ALL_AUTHORS_QUERY = `SELECT * FROM Author`;
+	db.all(SELECT_ALL_AUTHORS_QUERY, function(err, results) {
+        if (err) {
+                return console.log(err.message);
+        }
+        else{
+                console.log(results);
+                return res.send(results);
+        }
+    });
+});
+
+//Add author row into Author table
+app.get('/authors/insert', (req, res) => {
+	const {author_id, author_name} = req.query;
+	const INSERT_AUTHOR_QUERY = `INSERT INTO Author(username, author_name) VALUES('${username}', '${author_name}')`;
+	db.run(INSERT_AUTHOR_QUERY, function(err) {
+   	if (err) {
+        return console.log(err.message);
+   	}
+    // get the last insert id
+   	console.log(`A row has been inserted`);
+  	});
+});
+
+//Displays all follows (username and author_id)
+app.get('/follows', (req, res) => {
+	const SELECT_ALL_FOLLOWS_QUERY = `SELECT * FROM Follows`;
+	db.all(SELECT_ALL_FOLLOWS_QUERY, function(err, results) {
+        if (err) {
+                return console.log(err.message);
+        }
+        else{
+                console.log(results);
+                return res.send(results);
+        }
+    });
+});
+
+//Add follow row into Follows table (user follows author)
+app.get('/follows/insert', (req, res) => {
+	const {username, author_id} = req.query;
+	const INSERT_FOLLOW_QUERY = `INSERT INTO Follows(username, author_id) VALUES('${username}', '${author_id}')`;
+	db.run(INSERT_FOLLOW_QUERY, function(err) {
+   	if (err) {
+        return console.log(err.message);
+   	}
+    // get the last insert id
+   	console.log(`A row has been inserted`);
+  	});
+});
+
+//Delete row in Follows table (user unfollows author)
+app.get('/follows/delete', (req, res) => {
+	const {username, author_id} = req.query;
+	const DELETE_FOLLOW_QUERY = `DELETE FROM Folllows WHERE username='${username}' AND author_id='${author_id}'`;
+	db.run(DELETE_FOLLOW_QUERY, function(err) {
 	    if (err) {
 		return console.error(err.message);
 	    }
-	    console.log(`Natural Join successful`);
+	    console.log(`Row(s) deleted`);
 	});
 });
 

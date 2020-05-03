@@ -3,8 +3,11 @@
     "",
     "\\components",
     "\\pages",
+    "\\pages\\ArticleDetail",
+    "\\pages\\Author",
+    "\\pages\\Home",
     "\\pages\\Setting"
   ],
-  "SelectedNode": "\\components\\Sign.jsx",
+  "SelectedNode": "\\pages\\Setting\\index.jsx",
   "PreviewInSolutionExplorer": false
 }

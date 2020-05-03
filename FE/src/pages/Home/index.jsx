@@ -92,6 +92,29 @@ class Home extends Component {
     );
   };
 
+  /*
+  * Inserts new row into Follow account (assumes username and author_id exists)
+  */
+  followAuthor = index => {
+    const username = localStorage.getItem('usernameLocalStorage');
+    const { authors } = this.state;
+    const id = authors[index].id;
+    const url = `http://localhost:3001/follows/insert?username=${username}&author_id=${id}`;
+    return fetch(url).then(response => response.json()).catch(err => console.error(err));
+  }
+
+  /*
+  * Deletes row from Follow account (assumes username and author_id exists)
+  */
+  unfollowAuthor = index => {
+    const username = localStorage.getItem('usernameLocalStorage');
+    const { authors } = this.state;
+    const id = authors[index].id;
+    const url = `http://localhost:3001/follows/delete?username=${username}&author_id=${id}`;
+    return fetch(url).then(response => response.json()).catch(err => console.error(err));
+  }
+
+
   /**
    * 修改推荐作者的关注状态
    * @param index number 需要修改的作者在列表的下标
@@ -100,6 +123,12 @@ class Home extends Component {
     if (window.$isLogin) {
       const { authors } = this.state;
       authors[index].isAttention = !authors[index].isAttention;
+      if (authors[index].isAttention){
+        this.followAuthor(index);
+	  }
+      else{
+       this.unfollowAuthor(index);
+	  }
       this.setState({ authors });
     } else {
       this.topBarRef.sign(1);
@@ -143,6 +172,7 @@ class Home extends Component {
       </Row>
     );
   };
+
   render() {
     const { articles, authors, browsingHistory } = this.state;
     // const isResult = this.props.match.path.includes('result') ? true : false;
