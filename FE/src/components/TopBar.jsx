@@ -4,10 +4,14 @@ import styles from './TopBar.less';
 import { withRouter, Link } from 'react-router-dom';
 import Sign from './Sign';
 
+
+
 const { Search } = Input;
 
 const logoUrl = require('@/assets/images/logo_1.png');
 const imgUrl = require('@/assets/images/img.jpg');
+
+var name = '';
 
 class TopBar extends Component {
   constructor(props) {
@@ -27,6 +31,8 @@ class TopBar extends Component {
       isLogin: window.$isLogin,
     };
   }
+
+
   search = value => {
     this.props.history.push('./result?keywords=' + value);
   };
@@ -149,6 +155,8 @@ class TopBar extends Component {
       visible: false,
     });
     message.success('Login successful, welcome back');
+    localStorage.setItem('usernameLocalStorage', signIn.name);
+
     window.$isLogin = true;
     const url = this.props.location.pathname;
     this.props.history.replace(url);
@@ -169,22 +177,25 @@ class TopBar extends Component {
     }
 
     //Check if username already exists in database
-    const val = await this.getAccountRegister();
+    const val = await this.getUser();
     if(typeof val !== 'undefined'){
         message.error('This username is already taken. Please choose another username.')
         return;
 	}
 
-    const registerVal = await this.createAccount();
+    this.createAccount();
 
     this.setState({
       visible: false,
     });
     message.success('Register Success,Welcome to YISHOU');
+    localStorage.setItem('usernameLocalStorage', signUp.name);
+
     window.$isLogin = true;
     const url = this.props.location.pathname;
     this.props.history.replace(url);
   };
+
   render() {
     const { isTransparent = false } = this.props;
     const { visible } = this.state;

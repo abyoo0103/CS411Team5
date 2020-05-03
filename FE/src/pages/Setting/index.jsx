@@ -26,19 +26,41 @@ class Setting extends Component {
     });
   };
 
+  checkUser = _ => {
+    const { oldPsw } = this.state;
+    const username = localStorage.getItem('usernameLocalStorage');
+    const url = `http://localhost:3001/accounts/select?username=${username}&password=${oldPsw}`;
+    return fetch(url).then(response => response.json()).catch(err => console.error(err));
+  };
+
+  updatePassword = _ => {
+    const { newPsw } = this.state;
+    const username = localStorage.getItem('usernameLocalStorage');
+    const url = `http://localhost:3001/accounts/update?username=${username}&new_password=${newPsw}`;
+    return fetch(url).then(response => response.json()).catch(err => console.error(err));
+  };
+
   /**
    * 提交密码修改
    * submit password change
    */
-  submitChange = () => {
+  submitChange = async () => {
     const { oldPsw, newPsw, confirmPsw } = this.state;
     if (!oldPsw || !newPsw || !confirmPsw) {
       //判断密码都非空
-      message.error('Please enter your password correctly!');
+      message.error('You left at least one password empty!');
       return;
     }
+
+    const checkUserVal = await this.checkUser(); //Gets the value/query  (Uses aynchronous function await)
+    if(typeof checkUserVal === 'undefined'){
+        message.error('The old password is incorrect!');
+        return;
+	}
+
     if (newPsw === confirmPsw) {
       //两次密码一致
+      this.updatePassword();
       message.success('Password changed successfully！');
       this.setState({
         oldPsw: '',

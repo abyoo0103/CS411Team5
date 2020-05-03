@@ -14,6 +14,7 @@ let db = new sqlite3.Database('sequitur_accounts.db', (err) => {
 	console.log('Connected to database');
 });
 
+//Displays all accounts (usernames and passwords)
 app.get('/accounts', (req, res) => {
 	const SELECT_ALL_ACCOUNTS_QUERY = `SELECT * FROM Account`;
 	db.all(SELECT_ALL_ACCOUNTS_QUERY, function(err, results) {
@@ -34,7 +35,6 @@ app.get('/accounts/exists', (req, res) => {
 	const {username} = req.query;
 	const SELECT_ACCOUNT_BY_USERNAME_QUERY = `SELECT * FROM Account WHERE username='${username}'`;
 	db.get(SELECT_ACCOUNT_BY_USERNAME_QUERY, function(err, results) {
-    console.log(password)
    	 if (err) {
       		return console.log(err.message);
    	 }
@@ -98,7 +98,6 @@ app.get('/accounts/update', (req, res) => {
 	    console.log(`Row changed`);
 	});
 });
-
 	    
 app.get('/write/follows', (req, res) => {
 	const {author_id} = req.query;
