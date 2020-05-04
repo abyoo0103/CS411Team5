@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import styles from './index.less';
 import TopBar from '../../components/TopBar';
-import { Tabs, Form, Input, Button, message } from 'antd';
+import { Tabs, Form, Input, Button, message, Radio } from 'antd';
 
 const { TabPane } = Tabs;
+const plainOptions = ['Yes', 'No'];
 
 class Setting extends Component {
   constructor() {
@@ -12,6 +13,10 @@ class Setting extends Component {
       oldPsw: '', //旧密码
       newPsw: '', //新密码
       confirmPsw: '', //确认密码
+      value1: 'Yes',
+      value2: 'Yes',
+      value3: 'Yes',
+      value4: 'Yes',
     };
   }
 
@@ -59,12 +64,47 @@ class Setting extends Component {
     this.props.history.push('/home');
   };
 
+  onChange1 = e => {
+    console.log('radio1 checked', e.target.value);
+    this.setState({
+      value1: e.target.value,
+    });
+  };
+
+  onChange2 = e => {
+    console.log('radio2 checked', e.target.value);
+    this.setState({
+      value2: e.target.value,
+    });
+  };
+
+  onChange3 = e => {
+    console.log('radio3 checked', e.target.value);
+    this.setState({
+      value3: e.target.value,
+    });
+  };
+
+  onChange4 = e => {
+    console.log('radio4 checked', e.target.value);
+    this.setState({
+      value4: e.target.value,
+    });
+  };
+
+  submitSurvey = () => {
+    const { value1, value2, value3, value4 } = this.state;
+    //add your fetch code here to pass the result
+  }
+
+
   render() {
     const layout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 10 },
     };
     const { oldPsw, newPsw, confirmPsw } = this.state;
+    const { value1, value2, value3, value4 } = this.state;
     return (
       <div className={styles.wrapper}>
         <TopBar></TopBar>
@@ -112,6 +152,30 @@ class Setting extends Component {
               </ul>
               <Button type="primary" onClick={this.delete}>
                 Confirm Delete
+              </Button>
+            </TabPane>
+            <TabPane tab="Questionnaire" key="3">
+              <div className={styles.partTitle}>Finish this Questionnaire</div>
+              <ul>
+                <li>
+                    Are you interested in the Mathematics?
+                </li>
+                <Radio.Group options={plainOptions} onChange={this.onChange1} value={value1} />
+                <li>
+                    Are you interested in surgery?
+                </li>
+                <Radio.Group options={plainOptions} onChange={this.onChange2} value={value2} />
+                <li>
+                    Are you interested in Engineering?
+                </li>
+                <Radio.Group options={plainOptions} onChange={this.onChange3} value={value3} />
+                <li>
+                    Are you interested in medicine?
+                </li>
+                <Radio.Group options={plainOptions} onChange={this.onChange4} value={value4} />
+              </ul>
+              <Button type="primary" onClick={this.submitSurvey}>
+                Submit
               </Button>
             </TabPane>
           </Tabs>
