@@ -13,10 +13,10 @@ class Setting extends Component {
       oldPsw: '', //旧密码
       newPsw: '', //新密码
       confirmPsw: '', //确认密码
-      value1: 'Yes',
-      value2: 'Yes',
-      value3: 'Yes',
-      value4: 'Yes',
+      value1: '',
+      value2: '',
+      value3: '',
+      value4: '',
     };
   }
 
@@ -38,12 +38,12 @@ class Setting extends Component {
   submitChange = () => {
     const { oldPsw, newPsw, confirmPsw } = this.state;
     if (!oldPsw || !newPsw || !confirmPsw) {
-      //判断密码都非空
+      //check if two psw are same or not
       message.error('Please enter your password correctly!');
       return;
     }
     if (newPsw === confirmPsw) {
-      //两次密码一致
+      //if two psw are same
       message.success('Password changed successfully！');
       this.setState({
         oldPsw: '',
@@ -64,6 +64,7 @@ class Setting extends Component {
     this.props.history.push('/home');
   };
 
+  //four questions
   onChange1 = e => {
     console.log('radio1 checked', e.target.value);
     this.setState({
@@ -94,7 +95,14 @@ class Setting extends Component {
 
   submitSurvey = () => {
     const { value1, value2, value3, value4 } = this.state;
-    //add your fetch code here to pass the result
+    if (!value1 || !value2 || !value3 || !value4) {
+      //check if two psw are same or not
+      message.error('Please answer all questions!');
+      return;
+    } else {
+      message.success('Questionnaire submited successfully！');
+      //add your fetch code here to pass 4 results
+    }
   }
 
 
