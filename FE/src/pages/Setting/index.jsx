@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import styles from './index.less';
 import TopBar from '../../components/TopBar';
-import { Tabs, Form, Input, Button, message, radio } from 'antd';
+import { Tabs, Form, Input, Button, message, Radio } from 'antd';
 
 const { TabPane } = Tabs;
+const plainOptions = ['Yes', 'No'];
 
 class Setting extends Component {
   constructor() {
@@ -125,7 +126,6 @@ class Setting extends Component {
   submitSurvey = () => {
     const { value1, value2, value3, value4 } = this.state;
     if (!value1 || !value2 || !value3 || !value4) {
-      //check if two psw are same or not
       message.error('Please answer all questions!');
       return;
     } else {
