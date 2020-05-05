@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './index.less';
 import TopBar from '../../components/TopBar';
-import { Tabs, Form, Input, Button, message } from 'antd';
+import { Tabs, Form, Input, Button, message, radio } from 'antd';
 
 const { TabPane } = Tabs;
 
@@ -12,6 +12,10 @@ class Setting extends Component {
       oldPsw: '', //旧密码
       newPsw: '', //新密码
       confirmPsw: '', //确认密码
+      value1: 'yes', // Medicine (survey results)
+      value2: 'yes', // Science (survey results)
+      value3: 'yes', // Math (survey results)
+      value4: 'yes', // Engineering (survey results)
     };
   }
 
@@ -89,12 +93,55 @@ class Setting extends Component {
     this.props.history.push('/home');
   };
 
+    //four questions
+  onChange1 = e => {
+    console.log('radio1 checked', e.target.value);
+    this.setState({
+      value1: e.target.value,
+    });
+  };
+
+  onChange2 = e => {
+    console.log('radio2 checked', e.target.value);
+    this.setState({
+      value2: e.target.value,
+    });
+  };
+
+  onChange3 = e => {
+    console.log('radio3 checked', e.target.value);
+    this.setState({
+      value3: e.target.value,
+    });
+  };
+
+  onChange4 = e => {
+    console.log('radio4 checked', e.target.value);
+    this.setState({
+      value4: e.target.value,
+    });
+  };
+
+  submitSurvey = () => {
+    const { value1, value2, value3, value4 } = this.state;
+    if (!value1 || !value2 || !value3 || !value4) {
+      //check if two psw are same or not
+      message.error('Please answer all questions!');
+      return;
+    } else {
+      message.success('Questionnaire submited successfully！');
+      //add your fetch code here to pass 4 results
+    }
+  }
+
+
   render() {
     const layout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 10 },
     };
     const { oldPsw, newPsw, confirmPsw } = this.state;
+    const { value1, value2, value3, value4 } = this.state;
     return (
       <div className={styles.wrapper}>
         <TopBar></TopBar>
@@ -144,11 +191,36 @@ class Setting extends Component {
                 Confirm Delete
               </Button>
             </TabPane>
+            <TabPane tab="Questionnaire" key="3">
+              <div className={styles.partTitle}>Finish this Questionnaire</div>
+              <ul>
+                <li>
+                    Are you interested in the Medicine?
+                </li>
+                <Radio.Group options={plainOptions} onChange={this.onChange1} value={value1} />
+                <li>
+                    Are you interested in Science (Chemistry)?
+                </li>
+                <Radio.Group options={plainOptions} onChange={this.onChange2} value={value2} />
+                <li>
+                    Are you interested in Math?
+                </li>
+                <Radio.Group options={plainOptions} onChange={this.onChange3} value={value3} />
+                <li>
+                    Are you interested in Engineering?
+                </li>
+                <Radio.Group options={plainOptions} onChange={this.onChange4} value={value4} />
+              </ul>
+              <Button type="primary" onClick={this.submitSurvey}>
+                Submit
+              </Button>
+            </TabPane>
           </Tabs>
         </div>
       </div>
     );
   }
+
 }
 
 export default Setting;
