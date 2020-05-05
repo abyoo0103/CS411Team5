@@ -96,7 +96,6 @@ class Setting extends Component {
   submitSurvey = () => {
     const { value1, value2, value3, value4 } = this.state;
     if (!value1 || !value2 || !value3 || !value4) {
-      //check if two psw are same or not
       message.error('Please answer all questions!');
       return;
     } else {
