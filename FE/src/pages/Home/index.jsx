@@ -206,7 +206,7 @@ class Home extends Component {
               <React.Fragment>
                 <Row justify="space-between" align="middle" style={{ marginTop: '40px' }}>
                   <Col>
-                    <span>Personal Recommendation</span>
+                    <span>BrowsingHistory</span>
                   </Col>
                 </Row>
                 <div>
