@@ -4,10 +4,14 @@ import styles from './TopBar.less';
 import { withRouter, Link } from 'react-router-dom';
 import Sign from './Sign';
 
+
+
 const { Search } = Input;
 
 const logoUrl = require('@/assets/images/logo_1.png');
 const imgUrl = require('@/assets/images/img.jpg');
+
+var name = '';
 
 class TopBar extends Component {
   constructor(props) {
@@ -27,8 +31,11 @@ class TopBar extends Component {
       isLogin: window.$isLogin,
     };
   }
+
+
   search = value => {
-    this.props.history.push('./result?keywords=' + value);
+    // this.props.history.push('./result?keywords=' + value);
+    this.props.history.push('./home?keywords=' + value);
   };
 
   userAvatar = () => {
@@ -97,19 +104,60 @@ class TopBar extends Component {
     this.setState({ type });
   };
 
+
+  /*
+  * Function that calls SELECT_ACCOUNT_QUERY (Used for login function)
+  */
+  getAccount = _ => {
+    const { signIn } = this.state;
+    //const proxyurl = "https://cors-anywhere.herokuapp.com/"; //Used to try to bypass CORS block
+    const url = `http://localhost:3001/accounts/select?username=${signIn.name}&password=${signIn.password}`;
+    return fetch(url).then(response => response.json()).catch(err => console.error(err));
+  };
+
+  /*
+  * Same as getAccount but used for register function (checks if username exists)
+  */
+  getUser =  _ => {
+    const { signUp } = this.state;
+    //const proxyurl = "https://cors-anywhere.herokuapp.com/"; //Used to try to bypass CORS block
+    const url = `http://localhost:3001/accounts/exists?username=${signUp.name}`;
+    return fetch(url).then(response => response.json()).catch(err => console.error(err));
+  };
+
+  /*
+  * Inserts new account into database (used in register function)
+  */
+  createAccount = _ => {
+    const { signUp } = this.state;
+    //const proxyurl = "https://cors-anywhere.herokuapp.com/"; //Used to try to bypass CORS block
+    const url = `http://localhost:3001/accounts/insert?username=${signUp.name}&password=${signUp.password}`;
+    return fetch(url).then(response => response.json()).catch(err => console.error(err));
+  };
+
   /**
    * 登录
    */
-  login = () => {
+  login = async () => {
     const { signIn } = this.state;
     if (!signIn.name || !signIn.password) {
-      message.error('Please enter the correct email or password!');
+      message.error('Please enter an email and password!');
       return;
     }
+
+    //Check if username/password is in database
+    const val = await this.getAccount(); //Gets the value/query  (Uses aynchronous function await)
+    if(typeof val === 'undefined'){
+        message.error('The username or password is incorrect.');
+        return;
+	}
+
     this.setState({
       visible: false,
     });
     message.success('Login successful, welcome back');
+    localStorage.setItem('usernameLocalStorage', signIn.name);
+
     window.$isLogin = true;
     const url = this.props.location.pathname;
     this.props.history.replace(url);
@@ -118,7 +166,7 @@ class TopBar extends Component {
   /**
    * 注册
    */
-  register = () => {
+  register = async () => {
     const { signUp } = this.state;
     if (!signUp.name || !signUp.password || !signUp.confirmPsw) {
       message.error('Please enter the correct email or password!');
@@ -128,14 +176,27 @@ class TopBar extends Component {
       message.error('The two passwords are different, please re-enter!');
       return;
     }
+
+    //Check if username already exists in database
+    const val = await this.getUser();
+    if(typeof val !== 'undefined'){
+        message.error('This username is already taken. Please choose another username.')
+        return;
+	}
+
+    this.createAccount();
+
     this.setState({
       visible: false,
     });
     message.success('Register Success,Welcome to YISHOU');
+    localStorage.setItem('usernameLocalStorage', signUp.name);
+
     window.$isLogin = true;
     const url = this.props.location.pathname;
     this.props.history.replace(url);
   };
+
   render() {
     const { isTransparent = false } = this.props;
     const { visible } = this.state;

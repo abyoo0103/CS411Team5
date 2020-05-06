@@ -9,6 +9,7 @@ import Index from '../pages';
 import Home from '@/pages/Home';
 import ArticleDetail from '@/pages/ArticleDetail';
 import Author from '@/pages/Author';
+import User from '@/pages/User';
 import Setting from '@/pages/Setting';
 import Result from '@/pages/Result';
 
@@ -31,7 +32,7 @@ const routes = [
   },
   {
     path: '/user',
-    component: Author,
+    component: User,
   },
   {
     path: '/setting',
