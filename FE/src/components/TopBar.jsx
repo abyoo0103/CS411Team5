@@ -34,7 +34,8 @@ class TopBar extends Component {
 
 
   search = value => {
-    this.props.history.push('./result?keywords=' + value);
+    // this.props.history.push('./result?keywords=' + value);
+    this.props.history.push('./home?keywords=' + value);
   };
 
   userAvatar = () => {
