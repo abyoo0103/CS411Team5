@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
-var PythonShell = require('python-shell');
+var pyshell = require('python-shell');
+var fs = require('fs');
 
 const app = express();
 app.use(cors());
@@ -122,8 +123,8 @@ app.get('accounts/following', (req, res) => {
             author_ids = res.send(results)
         }
    	    console.log(`A row has been selected`);
-    };
-}
+    });
+});
 
 //Displays all authors (author_id and author name)
 app.get('/authors', (req, res) => {
@@ -192,12 +193,13 @@ app.get('/follows/delete', (req, res) => {
 });
 
 //Runs Python script with input (author_id)
-app.get('recommendations/select', (req, res) => {
+app.get('/recommendations/select', (req, res) => {
     const {username} = req.query;
     const SELECT_FOLLOWING_QUERY = `SELECT author_id FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}'`;
     const SELECT_SURVEY_QUERY = `SELECT medicine, science, math, engineering FROM Account WHERE username='${username}'`;
     var author_ids = [];
     var surveyResults = [];
+    var test = 'hello';
 
     db.get(SELECT_FOLLOWING_QUERY, function(err, results) {
         //Write to a file using f.writeFile(filename, results)
@@ -205,11 +207,13 @@ app.get('recommendations/select', (req, res) => {
       		return console.log(err.message);
    	    }
         else{
-            console.log(results)
-            author_ids = res.send(results)
+            console.log(results);
+            fs.writeFile('following.json', JSON.stringify(results), function(err, result) {
+              if(err) console.log(err.message)
+            });
         }
-   	    console.log(`A row has been selected`);
-    };
+   	    console.log(`A row has been selected1`);
+    });
 
     db.get(SELECT_SURVEY_QUERY, function(err, results) {
         //Write to a file using f.writeFile(filename, results)
@@ -217,24 +221,26 @@ app.get('recommendations/select', (req, res) => {
       		return console.log(err.message);
    	    }
         else{
-            console.log(results)
-            surveyResults = res.send(results)
+            console.log(results);
+            fs.writeFile('survey.json', JSON.stringify(results), function(err, result) {
+              if(err) console.log(err.message)
+            });
         }
-   	    console.log(`A row has been selected`);
-    };
+   	    console.log(`A row has been selected2`);
+    });
+    console.log(test);
 
     //RUN PYTHON SCRIPT
     var options = {
-        scriptPath: 'python/scripts',
-        args: [author_ids, surveyResults], // pass arguments to the script here
+        scriptPath: '.',
     };
-    PythonShell.run('recommender.py', options, function (err, results) {
+    pyshell.PythonShell.run('recommender.py', options, function (err, results) {
         if (err) {
-            throw err;
+            return console.log(err.message);
         }
         console.log('results: %j', results);
     });
-}
+});
 
 app.get('/', (req, res) => {
 	res.send('hello from the sequitur server')
