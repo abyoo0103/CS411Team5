@@ -123,7 +123,8 @@ app.get('/accounts/survey', (req, res) => {
 //Display followed authors for user (join with Account and Follows)
 app.get('/accounts/following', (req, res) => {
     const {username} = req.query;
-    const SELECT_FOLLOWING_QUERY = `SELECT author_id FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}'`;
+    //const SELECT_FOLLOWING_QUERY = `SELECT author_id FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}'`;
+    const SELECT_FOLLOWING_QUERY = `SELECT author_id, name FROM Author WHERE author_id IN (SELECT author_id FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}')`;
 
     db.all(SELECT_FOLLOWING_QUERY, function(err, results) {
         //Write to a file using f.writeFile(filename, results)
@@ -207,7 +208,7 @@ app.get('/follows/delete', (req, res) => {
 //Runs Python script with input (author_id)
 app.get('/recommendations/select', (req, res) => {
     const {username} = req.query;
-    const SELECT_FOLLOWING_QUERY = `SELECT author_id FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}'`;
+    const SELECT_FOLLOWING_QUERY = `SELECT author_id, name FROM Author WHERE author_id IN (SELECT author_id FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}')`;
     const SELECT_SURVEY_QUERY = `SELECT medicine, science, math, engineering FROM Account WHERE username='${username}'`;
     var author_ids = [];
     var surveyResults = [];

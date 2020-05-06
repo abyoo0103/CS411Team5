@@ -34,12 +34,19 @@ class User extends Component {
   } 
 
   getFollowing = _ => {
-    const username = localStorage.getItem('usernameLocalStorage');
-    const url = `http://localhost:3001/accounts/following?username=${username}`;
-    fetch(url)
+      const username = localStorage.getItem('usernameLocalStorage');
+      const url = `http://localhost:3001/accounts/following/?username=${username}`;
+      console.log(url);
+      fetch(url)
         .then(response => response.json())
-        .then(response => this.setState({following: response.data}))
-        .catch(err => console.error(err));
+        .then(response => {
+          console.log('json:',response)
+          var key = Object.keys(response)
+          // this.state.following.push(response[key]['name'])
+          this.setState({following:[...this.state.following, response[key]['name']]})
+          console.log('array数组2:',this.state.following)
+          })
+        .catch(err => console.error('错误:',err));
   }
 
   renderFollowing = ({author_id}) => <div key={author_id}> {author_id} </div>
