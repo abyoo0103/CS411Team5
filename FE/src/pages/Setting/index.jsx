@@ -13,17 +13,14 @@ class Setting extends Component {
       oldPsw: '', //旧密码
       newPsw: '', //新密码
       confirmPsw: '', //确认密码
-<<<<<<< HEAD
       value1: '',
       value2: '',
       value3: '',
       value4: '',
-=======
       value1: 'yes', // Medicine (survey results)
       value2: 'yes', // Science (survey results)
       value3: 'yes', // Math (survey results)
       value4: 'yes', // Engineering (survey results)
->>>>>>> alejandro
     };
   }
 
@@ -65,13 +62,10 @@ class Setting extends Component {
   submitChange = async () => {
     const { oldPsw, newPsw, confirmPsw } = this.state;
     if (!oldPsw || !newPsw || !confirmPsw) {
-<<<<<<< HEAD
       //check if two psw are same or not
       message.error('Please enter your password correctly!');
-=======
       //判断密码都非空
       message.error('You left at least one password empty!');
->>>>>>> alejandro
       return;
     }
 
@@ -82,12 +76,9 @@ class Setting extends Component {
 	}
 
     if (newPsw === confirmPsw) {
-<<<<<<< HEAD
       //if two psw are same
-=======
       //两次密码一致
       this.updatePassword();
->>>>>>> alejandro
       message.success('Password changed successfully！');
       this.setState({
         oldPsw: '',
@@ -110,11 +101,10 @@ class Setting extends Component {
     this.props.history.push('/home');
   };
 
-<<<<<<< HEAD
+
   //four questions
-=======
+
     //four questions
->>>>>>> alejandro
   onChange1 = e => {
     console.log('radio1 checked', e.target.value);
     this.setState({
@@ -215,7 +205,6 @@ class Setting extends Component {
               <div className={styles.partTitle}>Finish this Questionnaire</div>
               <ul>
                 <li>
-<<<<<<< HEAD
                     Are you interested in the Mathematics?
                 </li>
                 <Radio.Group options={plainOptions} onChange={this.onChange1} value={value1} />
@@ -229,7 +218,6 @@ class Setting extends Component {
                 <Radio.Group options={plainOptions} onChange={this.onChange3} value={value3} />
                 <li>
                     Are you interested in medicine?
-=======
                     Are you interested in the Medicine?
                 </li>
                 <Radio.Group options={plainOptions} onChange={this.onChange1} value={value1} />
@@ -243,7 +231,6 @@ class Setting extends Component {
                 <Radio.Group options={plainOptions} onChange={this.onChange3} value={value3} />
                 <li>
                     Are you interested in Engineering?
->>>>>>> alejandro
                 </li>
                 <Radio.Group options={plainOptions} onChange={this.onChange4} value={value4} />
               </ul>
