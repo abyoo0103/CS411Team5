@@ -1,10 +1,10 @@
 const express = require('express');
-//const cors = require('cors');
+const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
-//app.use(cors());
-
+app.use(cors());
+app.options('*', cors());
 
 // Open/connect to disk file database (sequitur_accounts)
 let db = new sqlite3.Database('sequitur_accounts.db', (err) => {
@@ -30,6 +30,10 @@ app.get('/accounts', (req, res) => {
         });
 });
 
+//app.get('recommendations/select', (req, res) => {
+//  RUN PYTHON SCRIPT
+//}
+//
 //Checks if username exists
 app.get('/accounts/exists', (req, res) => {
 	const {username} = req.query;
