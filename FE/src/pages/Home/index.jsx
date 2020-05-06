@@ -216,7 +216,7 @@ class Home extends Component {
                         className={styles.history}
                         onClick={() => this.props.history.push('/detail/67')}
                       >
-                        here are personal recommendations
+                        BrowsingHistory here
                       </div>
                     ))}
                 </div>
