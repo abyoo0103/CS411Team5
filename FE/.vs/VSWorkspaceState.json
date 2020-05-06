@@ -4,8 +4,9 @@
     "\\src",
     "\\src\\components",
     "\\src\\pages",
+    "\\src\\pages\\Home",
     "\\src\\pages\\Setting"
   ],
-  "SelectedNode": "\\src\\pages\\User",
+  "SelectedNode": "\\src\\pages\\Setting\\index.jsx",
   "PreviewInSolutionExplorer": false
 }

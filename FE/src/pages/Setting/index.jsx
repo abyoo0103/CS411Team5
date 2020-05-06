@@ -13,12 +13,12 @@ class Setting extends Component {
       oldPsw: '', //旧密码
       newPsw: '', //新密码
       confirmPsw: '', //确认密码
-      value1: 'yes', // Medicine (survey results)
-      value2: 'yes', // Science (survey results)
-      value3: 'yes', // Math (survey results)
-      value4: 'yes', // Engineering (survey results)
+      value1: 'Yes', // Medicine (survey results)
+      value2: 'Yes', // Science (survey results)
+      value3: 'Yes', // Math (survey results)
+      value4: 'Yes', // Engineering (survey results)
     };
-  }
+  } 
 
   /**
    * input输入保存各种密码
@@ -128,9 +128,17 @@ class Setting extends Component {
     if (!value1 || !value2 || !value3 || !value4) {
       message.error('Please answer all questions!');
       return;
-    } else {
+    } 
+    else {
+      const username = localStorage.getItem('usernameLocalStorage');
+      const med = value1 == "Yes" ? 1 : 0;
+      const sci = value2 == "Yes" ? 1 : 0;
+      const mat = value3 == "Yes" ? 1 : 0;
+      const eng = value4 == "Yes" ? 1 : 0;
+
+      const url = `http://localhost:3001/accounts/survey?username=${username}&medicine=${med}&science=${sci}&math=${mat}&engineering=${eng}`;
+      fetch(url).then(response => response.json()).catch(err => console.error(err));  //Update Survey results
       message.success('Questionnaire submited successfully！');
-      //add your fetch code here to pass 4 results
     }
   }
 

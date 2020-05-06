@@ -16,23 +16,33 @@ class User extends Component {
       name: localStorage.getItem('usernameLocalStorage'),
       articles: articles, //article list
       attentions: [1, 1, 1, 1], // Guanyu - following
-      following: []
+      following: ['test_id'] // List of author_ids
     };
   }
 
   componentDidMount(){
+      console.log('before fetch');
+      console.log(this.following);
+      console.log(this.attentions)
+
       this.name = localStorage.getItem('usernameLocalStorage');
-      console.log(this.name)
-      console.log(localStorage.getItem('usernameLocalStorage'));
       this.getFollowing();
-  }
+
+      console.log(localStorage.getItem('usernameLocalStorage'));
+      console.log(this.following);
+      console.log('hi');
+  } 
 
   getFollowing = _ => {
-      fetch('http://localhost:3001/accounts/following')
+    const username = localStorage.getItem('usernameLocalStorage');
+    const url = `http://localhost:3001/accounts/following?username=${username}`;
+    fetch(url)
         .then(response => response.json())
         .then(response => this.setState({following: response.data}))
         .catch(err => console.error(err));
   }
+
+  renderFollowing = ({author_id}) => <div key={author_id}> {author_id} </div>
 
   /**
    * 函数式组件，文章组件
@@ -69,7 +79,7 @@ class User extends Component {
   };
 
   render() {
-    const { articles, attentions, name } = this.state;
+    const { articles, attentions, name, following } = this.state;
     return (
       <div className={styles.wrapper}>
         <TopBar></TopBar>
@@ -90,8 +100,8 @@ class User extends Component {
               {articles && articles.map(article => this.article(article))}
             </TabPane>
             <TabPane tab="following" key="2">
-              {attentions &&
-                attentions.map(attention => (
+              {following &&
+                following.map(following => (
                   <Row align="middle" className={styles.attention}>
                     <Col span={2}>
                       <Avatar size={60} src={imgUrl} />
@@ -101,7 +111,7 @@ class User extends Component {
                         className={styles.name}
                         onClick={() => this.props.history.push(`/user/${14}`)}
                       >
-                        followings
+                        {following}
                       </div>
                       <div className={styles.data}>
                         <span>id:dsadasdasda</span>|<span>articles:15145</span>
