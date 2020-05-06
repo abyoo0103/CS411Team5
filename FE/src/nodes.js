@@ -1,10 +1,12 @@
 const express = require('express');
-//const cors = require('cors');
+const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
+var PythonShell = require('python-shell');
 
 const app = express();
-//app.use(cors());
 
+app.use(cors());
+app.options('*', cors());
 
 // Open/connect to disk file database (sequitur_accounts)
 let db = new sqlite3.Database('sequitur_accounts.db', (err) => {
@@ -53,9 +55,9 @@ app.get('/accounts/select', (req, res) => {
 	const SELECT_ACCOUNT_QUERY = `SELECT * FROM Account WHERE username='${username}' AND password='${password}'`;
 	db.get(SELECT_ACCOUNT_QUERY, function(err, results) {
     console.log(password)
-   	 if (err) {
+   	if (err) {
       		return console.log(err.message);
-   	 }
+   	}
     else{
       console.log(results)
       return res.send(results)
@@ -65,6 +67,7 @@ app.get('/accounts/select', (req, res) => {
   });
 });
  
+//Insert row into Account table (register account)
 app.get('/accounts/insert', (req, res) => {
 	const {username, password} = req.query;
 	const INSERT_ACCOUNT_QUERY = `INSERT INTO Account(username, password) VALUES('${username}', '${password}')`;
@@ -77,6 +80,7 @@ app.get('/accounts/insert', (req, res) => {
   	});
 });
 
+//Delete account from Account table
 app.get('/accounts/delete', (req, res) => {
 	const {username} = req.query;
 	const DELETE_ACCOUNT_QUERY = `DELETE FROM Account WHERE username='${username}'`;
@@ -88,6 +92,7 @@ app.get('/accounts/delete', (req, res) => {
 	});
 });
 
+//Update password
 app.get('/accounts/update', (req, res) => {
 	const {username, new_password} = req.query;
 	const UPDATE_ACCOUNT_QUERY = `UPDATE Account SET password='${new_password}' WHERE username='${username}'`;
@@ -98,6 +103,24 @@ app.get('/accounts/update', (req, res) => {
 	    console.log(`Row changed`);
 	});
 });
+
+//Display followed authors for user (join with Account and Follows)
+app.get('accounts/following', (req, res) => {
+    const {username} = req.query;
+    const SELECT_FOLLOWING_QUERY = `SELECT author_id FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}'`;
+
+    db.get(SELECT_FOLLOWING_QUERY, function(err, results) {
+        //Write to a file using f.writeFile(filename, results)
+        if (err) {
+      		return console.log(err.message);
+   	    }
+        else{
+            console.log(results)
+            author_ids = res.send(results)
+        }
+   	    console.log(`A row has been selected`);
+    };
+}
 
 //Displays all authors (author_id and author name)
 app.get('/authors', (req, res) => {
@@ -164,6 +187,51 @@ app.get('/follows/delete', (req, res) => {
 	    console.log(`Row(s) deleted`);
 	});
 });
+
+//Runs Python script with input (author_id)
+app.get('recommendations/select', (req, res) => {
+    const {username} = req.query;
+    const SELECT_FOLLOWING_QUERY = `SELECT author_id FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}'`;
+    const SELECT_SURVEY_QUERY = `SELECT medicine, science, math, engineering FROM Account WHERE username='${username}'`;
+    var author_ids = [];
+    var surveyResults = [];
+
+    db.get(SELECT_FOLLOWING_QUERY, function(err, results) {
+        //Write to a file using f.writeFile(filename, results)
+        if (err) {
+      		return console.log(err.message);
+   	    }
+        else{
+            console.log(results)
+            author_ids = res.send(results)
+        }
+   	    console.log(`A row has been selected`);
+    };
+
+    db.get(SELECT_SURVEY_QUERY, function(err, results) {
+        //Write to a file using f.writeFile(filename, results)
+        if (err) {
+      		return console.log(err.message);
+   	    }
+        else{
+            console.log(results)
+            surveyResults = res.send(results)
+        }
+   	    console.log(`A row has been selected`);
+    };
+
+    //RUN PYTHON SCRIPT
+    var options = {
+        scriptPath: 'python/scripts',
+        args: [author_ids, surveyResults], // pass arguments to the script here
+    };
+    PythonShell.run('recommender.py', options, function (err, results) {
+        if (err) {
+            throw err;
+        }
+        console.log('results: %j', results);
+    });
+}
 
 app.get('/', (req, res) => {
 	res.send('hello from the sequitur server')

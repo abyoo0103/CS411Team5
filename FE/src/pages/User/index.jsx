@@ -13,9 +13,25 @@ class User extends Component {
   constructor() {
     super();
     this.state = {
+      name: localStorage.getItem('usernameLocalStorage'),
       articles: articles, //article list
-      attentions: [1, 1, 1, 1], //following
+      attentions: [1, 1, 1, 1], // Guanyu - following
+      following: []
     };
+  }
+
+  componentDidMount(){
+      this.name = localStorage.getItem('usernameLocalStorage');
+      console.log(this.name)
+      console.log(localStorage.getItem('usernameLocalStorage'));
+      this.getFollowing();
+  }
+
+  getFollowing = _ => {
+      fetch('http://localhost:3001/accounts/following')
+        .then(response => response.json())
+        .then(response => this.setState({following: response.data}))
+        .catch(err => console.error(err));
   }
 
   /**
@@ -51,8 +67,9 @@ class User extends Component {
       </div>
     );
   };
+
   render() {
-    const { articles, attentions } = this.state;
+    const { articles, attentions, name } = this.state;
     return (
       <div className={styles.wrapper}>
         <TopBar></TopBar>
@@ -62,7 +79,7 @@ class User extends Component {
               <Avatar size={80} src={imgUrl} />
             </Col>
             <Col>
-              <div className={styles.authorName}>dsadasffashfas</div>
+              <div className={styles.authorName}> {name} </div>
               <div className={styles.authorData}>
                 <span>articles 100</span>|<span>attentions 100</span>|<span>fans 100</span>
               </div>

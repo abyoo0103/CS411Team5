@@ -5,7 +5,8 @@
     "\\FE\\src",
     "\\FE\\src\\components",
     "\\FE\\src\\pages",
-    "\\FE\\src\\pages\\Result"
+    "\\FE\\src\\pages\\Result",
+    "\\FE\\src\\pages\\User"
   ],
   "SelectedNode": "\\FE\\src\\nodes.js",
   "PreviewInSolutionExplorer": false
