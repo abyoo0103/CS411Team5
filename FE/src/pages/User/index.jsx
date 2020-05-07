@@ -27,7 +27,7 @@ class User extends Component {
 
   getFollowing = _ => {
       const username = localStorage.getItem('usernameLocalStorage');
-      const url = `http://localhost:3001/accounts/following/?username=${username}`;
+      const url = `http://localhost:3001/accounts/followingCount/?username=${username}`;
       console.log(url);
       fetch(url)
         .then(response => response.json())
@@ -35,7 +35,7 @@ class User extends Component {
           console.log('json:',response)
           var key = Object.keys(response)
           // this.state.following.push(response[key]['name'])
-          this.setState({following:[...this.state.following, response[key]['name']]})
+          this.setState({following:[...this.state.following, response['0']['num']]})
           console.log('array数组2:',this.state.following)
           })
         .catch(err => console.error('err',err));
@@ -113,9 +113,6 @@ class User extends Component {
                         onClick={() => this.props.history.push(`/user/${14}`)}
                       >
                         {following}
-                      </div>
-                      <div className={styles.data}>
-                        <span>id:dsadasdasda</span>|<span>articles:15145</span>
                       </div>
                     </Col>
                   </Row>

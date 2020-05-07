@@ -140,7 +140,7 @@ app.get('/accounts/following', (req, res) => {
 //Get the following count for a user
 app.get('/accounts/followingCount', (req, res) => {
     const {username} = req.query;
-    const SELECT_FOLLOWING_QUERY = `SELECT count(*) FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}'`;
+    const SELECT_FOLLOWING_QUERY = `SELECT count(*) as num FROM Follows NATURAL JOIN Account GROUP BY username`;
 
     db.all(SELECT_FOLLOWING_QUERY, function(err, results) {
         if (err) {
@@ -156,7 +156,7 @@ app.get('/accounts/followingCount', (req, res) => {
 
 //Displays all authors (author_id and author name)
 app.get('/authors', (req, res) => {
-	const SELECT_ALL_AUTHORS_QUERY = `SELECT name, Author.author_id, COUNT(username) as follower_count FROM Author LEFT JOIN Follows ON Follows.author_id=Author.author_id WHERE 1 IS NOT NULL GROUP BY name, Author.author_id ORDER BY COUNT(*) DESC LIMIT 20`;
+	const SELECT_ALL_AUTHORS_QUERY = `SELECT name, Author.author_id, COUNT(username) as follower_count FROM Author LEFT JOIN Follows ON Follows.author_id=Author.author_id WHERE 1 IS NOT NULL GROUP BY name, Author.author_id ORDER BY COUNT(username) DESC LIMIT 20`;
 	db.all(SELECT_ALL_AUTHORS_QUERY, function(err, results) {
         if (err) {
                 return console.log(err.message);
@@ -219,7 +219,7 @@ app.get('/authors/insert', (req, res) => {
 
 //Displays all follows (username and author_id)
 app.get('/follows', (req, res) => {
-	const SELECT_ALL_FOLLOWS_QUERY = `SELECT * FROM Follows`;
+	const SELECT_ALL_FOLLOWS_QUERY = `SELECT * FROM Follows WHERE username='${username}'`;
 	db.all(SELECT_ALL_FOLLOWS_QUERY, function(err, results) {
         if (err) {
                 return console.log(err.message);
@@ -240,14 +240,14 @@ app.get('/follows/insert', (req, res) => {
         return console.log(err.message);
    	}
     // get the last insert id
-   	console.log(`A row has been inserted`);
+   	console.log(`A row has been inserted into follows`);
   	});
 });
 
 //Delete row in Follows table (user unfollows author)
 app.get('/follows/delete', (req, res) => {
 	const {username, author_id} = req.query;
-	const DELETE_FOLLOW_QUERY = `DELETE FROM Folllows WHERE username='${username}' AND author_id='${author_id}'`;
+	const DELETE_FOLLOW_QUERY = `DELETE FROM Follows WHERE username='${username}' AND author_id='${author_id}'`;
 	db.run(DELETE_FOLLOW_QUERY, function(err) {
 	    if (err) {
 		return console.error(err.message);
@@ -336,6 +336,7 @@ app.get('/recommendations/select', (req, res) => {
     }
     else{
       console.log(results1)
+      return res.send(results1);
     }
   });
 });

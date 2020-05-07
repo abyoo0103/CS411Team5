@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TopBar from '@/components/TopBar';
 import styles from './index.less';
-import articles from './articles';
+//import articles from './articles';
 import { Button, Row, Col, Avatar } from 'antd';
 
 const imgUrl = require('../../assets/images/img.jpg');
@@ -10,16 +10,13 @@ class Home extends Component {
   constructor() {
     super();
     this.state = {
-      articles: articles, //文章列表
+      articles: [], //文章列表
       authors: [], //作者列表
       recommends: [],
-      browsingHistory: [1, 1, 1, 1, 1, 1, 1], //浏览记录列表
+      browsingHistory: [], //浏览记录列表
     };
   }
 
-  componentDidMount(){
-    this.getRecommendation();
-  }
   /**
    * 跳转详情页
    * @param id string 文章id
@@ -40,28 +37,27 @@ class Home extends Component {
     return (
       <div className={styles.article} key={article.id}>
         <div className={styles.articleContent}>
-          <div className={styles.articleTitle} onClick={() => this.toDetail(article.id)}>
+          <div className={styles.articleTitle} onClick={() => this.toDetail(article.paper_id)}>
             {article.title}
           </div>
-          <div className={styles.articleText}>{article.content}</div>
           <div className={styles.articleData}>
             <span>
               <img src={commentUrl} alt="" />
-              <span>{article.comment}</span>
+              <span>{'0'}</span>
             </span>
             <span>
               <img src={likeUrl} alt="" />
-              <span>{article.like}</span>
+              <span>{'0'}</span>
             </span>
           </div>
         </div>
-        <img className={styles.articleImg} src={imgUrl} alt="" />
       </div>
     );
   };
 
   componentDidMount(){
       this.getAuthors();
+      this.getRecommendation();
   } 
 
   getAuthors = _ => {
@@ -86,7 +82,8 @@ class Home extends Component {
   followAuthor = index => {
     const username = localStorage.getItem('usernameLocalStorage');
     const { authors } = this.state;
-    const id = authors[index].id;
+    const id = authors[index].author_id;
+    console.log('index is', id);
     const url = `http://localhost:3001/follows/insert?username=${username}&author_id=${id}`;
     return fetch(url).then(response => response.json()).catch(err => console.error(err));
   }
@@ -102,6 +99,7 @@ class Home extends Component {
     return fetch(url).then(response => response.json()).catch(err => console.error(err));
   }
 
+  
   getRecommendation = _ => {
     const username = localStorage.getItem('usernameLocalStorage');
     const url = `http://localhost:3001/recommendations/select?username=${username}`;
@@ -112,8 +110,10 @@ class Home extends Component {
         console.log('json:',response)
         var key = Object.keys(response)
         // this.state.following.push(response[key]['name'])
-        this.setState({recommends:[...this.state.recommends, response[key]['title']]})
-        console.log('array数组2:',this.state.recommends)
+        for(var i = 0; i < key.length; i++){
+          this.setState({articles:[...this.state.articles, response[key[i]]]})
+        }
+        console.log('array数组2:',this.state.articles)
         })
       .catch(err => console.error('错误:',err));
   }
@@ -185,7 +185,7 @@ class Home extends Component {
         />
         <div className={styles.container}>
           <div className={styles.containerLeft}>
-            {recommends && recommends.map(recommends => this.recommends(recommends))}
+            {articles && articles.map(articles => this.article(articles))}
             <Button className={styles.more}>Read More</Button>
           </div>
           <div className={styles.containerRight}>

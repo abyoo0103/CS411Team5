@@ -138,6 +138,8 @@ class Setting extends Component {
 
       const url = `http://localhost:3001/accounts/survey?username=${username}&medicine=${med}&science=${sci}&math=${mat}&engineering=${eng}`;
       fetch(url).then(response => response.json()).catch(err => console.error(err));  //Update Survey results
+      const url2 = `http://localhost:3001/recommendations/insert?username=${username}`;
+      fetch(url2).then(response => response.json()).catch(err => console.error(err));  //Update Survey results
       message.success('Questionnaire submited successfully！');
     }
   }
