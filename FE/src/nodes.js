@@ -123,11 +123,26 @@ app.get('/accounts/survey', (req, res) => {
 //Display followed authors for user (join with Account and Follows)
 app.get('/accounts/following', (req, res) => {
     const {username} = req.query;
-    //const SELECT_FOLLOWING_QUERY = `SELECT author_id FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}'`;
     const SELECT_FOLLOWING_QUERY = `SELECT author_id, name FROM Author WHERE author_id IN (SELECT author_id FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}')`;
 
     db.all(SELECT_FOLLOWING_QUERY, function(err, results) {
-        //Write to a file using f.writeFile(filename, results)
+        if (err) {
+      		return console.log(err.message);
+   	    }
+        else{
+            console.log(results)
+            author_ids = res.send(results)
+        }
+   	    console.log(`A row has been selected`);
+    });
+});
+
+//Get the following count for a user
+app.get('/accounts/followingCount', (req, res) => {
+    const {username} = req.query;
+    const SELECT_FOLLOWING_QUERY = `SELECT count(*) FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}'`;
+
+    db.all(SELECT_FOLLOWING_QUERY, function(err, results) {
         if (err) {
       		return console.log(err.message);
    	    }
@@ -141,7 +156,7 @@ app.get('/accounts/following', (req, res) => {
 
 //Displays all authors (author_id and author name)
 app.get('/authors', (req, res) => {
-	const SELECT_ALL_AUTHORS_QUERY = `SELECT * FROM Author`;
+	const SELECT_ALL_AUTHORS_QUERY = `SELECT name, Author.author_id, COUNT(username) as follower_count FROM Author LEFT JOIN Follows ON Follows.author_id=Author.author_id WHERE 1 IS NOT NULL GROUP BY name, Author.author_id ORDER BY COUNT(*) DESC LIMIT 20`;
 	db.all(SELECT_ALL_AUTHORS_QUERY, function(err, results) {
         if (err) {
                 return console.log(err.message);
@@ -150,6 +165,42 @@ app.get('/authors', (req, res) => {
                 console.log(results);
                 return res.send(results);
         }
+    });
+});
+
+//Display author followers (join with Author and Follows)
+app.get('/author/followers', (req, res) => {
+    const {author_id} = req.query;
+    const SELECT_FOLLOWERS_QUERY = `SELECT username, password FROM Account WHERE username IN (SELECT username FROM Follows NATURAL JOIN Author GROUP BY username HAVING author_id='${author_id}')`;
+
+    db.all(SELECT_FOLLOWING_QUERY, function(err, results) {
+        //Write to a file using f.writeFile(filename, results)
+        if (err) {
+      		return console.log(err.message);
+   	    }
+        else{
+            console.log(results);
+            usernames = res.send(results);
+        }
+   	    console.log(`A row has been selected`);
+    });
+});
+
+//Get the follower count for an author
+app.get('/author/followersCount', (req, res) => {
+    const {author_id} = req.query;
+    const SELECT_FOLLOWERS_QUERY = `SELECT count(*) FROM Follows NATURAL JOIN Author GROUP BY username HAVING author_id='${author_id}'`;
+
+    db.all(SELECT_FOLLOWING_QUERY, function(err, results) {
+        //Write to a file using f.writeFile(filename, results)
+        if (err) {
+      		return console.log(err.message);
+   	    }
+        else{
+            console.log(results);
+            usernames = res.send(results);
+        }
+   	    console.log(`A row has been selected`);
     });
 });
 
@@ -253,6 +304,10 @@ app.get('/recommendations/select', (req, res) => {
         }
         console.log('results: %j', results);
     });
+});
+
+app.get('/recommendations/update', (req, res) => {
+
 });
 
 app.get('/', (req, res) => {

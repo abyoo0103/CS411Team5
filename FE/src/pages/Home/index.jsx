@@ -11,43 +11,7 @@ class Home extends Component {
     super();
     this.state = {
       articles: articles, //文章列表
-      authors: [
-        {
-          id: 31321,
-          name: 'Hello',
-          words: 14545,
-          stars: 564,
-          isAttention: false,
-        },
-        {
-          id: 31321,
-          name: 'ds',
-          words: 14545,
-          stars: 564,
-          isAttention: false,
-        },
-        {
-          id: 31321,
-          name: 'vss',
-          words: 14545,
-          stars: 564,
-          isAttention: false,
-        },
-        {
-          id: 31321,
-          name: 'Path',
-          words: 14545,
-          stars: 564,
-          isAttention: false,
-        },
-        {
-          id: 31321,
-          name: 'john',
-          words: 14545,
-          stars: 564,
-          isAttention: false,
-        },
-      ], //作者列表
+      authors: [], //作者列表
       browsingHistory: [1, 1, 1, 1, 1, 1, 1], //浏览记录列表
     };
   }
@@ -91,6 +55,26 @@ class Home extends Component {
       </div>
     );
   };
+
+  componentDidMount(){
+      this.getAuthors();
+  } 
+
+  getAuthors = _ => {
+      const url = `http://localhost:3001/authors`;
+      console.log(url);
+      fetch(url)
+        .then(response => response.json())
+        .then(response => {
+          console.log('json:',response)
+          var key = Object.keys(response)
+          for(var i = 0; i < key.length; i++){
+          this.setState({authors:[...this.state.authors, response[key[i]]]})
+		  }
+          console.log('array数组2:',this.state.authors)
+          })
+        .catch(err => console.error('err',err));
+  }
 
   /*
   * Inserts new row into Follow account (assumes username and author_id exists)
@@ -151,12 +135,9 @@ class Home extends Component {
             </Col>
             <Col
               style={{ cursor: 'pointer' }}
-              onClick={() => this.props.history.push('/author/' + author.id)}
+              onClick={() => this.props.history.push('/author/' + author.author_id)}
             >
               <div className={styles.authorName}>{author.name}</div>
-              <div className={styles.authorData}>
-                {author.words}KWords | {author.stars}KStars
-              </div>
             </Col>
           </Row>
         </Col>

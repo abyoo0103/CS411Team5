@@ -16,21 +16,13 @@ class User extends Component {
       name: localStorage.getItem('usernameLocalStorage'),
       articles: articles, //article list
       attentions: [1, 1, 1, 1], // Guanyu - following
-      following: ['test_id'] // List of author_ids
+      following: [] // List of author_ids
     };
   }
 
   componentDidMount(){
-      console.log('before fetch');
-      console.log(this.following);
-      console.log(this.attentions)
-
       this.name = localStorage.getItem('usernameLocalStorage');
       this.getFollowing();
-
-      console.log(localStorage.getItem('usernameLocalStorage'));
-      console.log(this.following);
-      console.log('hi');
   } 
 
   getFollowing = _ => {
@@ -46,8 +38,10 @@ class User extends Component {
           this.setState({following:[...this.state.following, response[key]['name']]})
           console.log('array数组2:',this.state.following)
           })
-        .catch(err => console.error('错误:',err));
+        .catch(err => console.error('err',err));
   }
+
+  //getFollowingCount
 
   renderFollowing = ({author_id}) => <div key={author_id}> {author_id} </div>
 
