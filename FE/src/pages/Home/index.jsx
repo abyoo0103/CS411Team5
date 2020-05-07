@@ -12,10 +12,14 @@ class Home extends Component {
     this.state = {
       articles: articles, //文章列表
       authors: [], //作者列表
+      recommends: [],
       browsingHistory: [1, 1, 1, 1, 1, 1, 1], //浏览记录列表
     };
   }
 
+  componentDidMount(){
+    this.getRecommendation();
+  }
   /**
    * 跳转详情页
    * @param id string 文章id
@@ -98,7 +102,21 @@ class Home extends Component {
     return fetch(url).then(response => response.json()).catch(err => console.error(err));
   }
 
-
+  getRecommendation = _ => {
+    const username = localStorage.getItem('usernameLocalStorage');
+    const url = `http://localhost:3001/recommendations/select?username=${username}`;
+    console.log(url);
+    fetch(url)
+      .then(response => response.json())
+      .then(response => {
+        console.log('json:',response)
+        var key = Object.keys(response)
+        // this.state.following.push(response[key]['name'])
+        this.setState({recommends:[...this.state.recommends, response[key]['title']]})
+        console.log('array数组2:',this.state.recommends)
+        })
+      .catch(err => console.error('错误:',err));
+  }
   /**
    * 修改推荐作者的关注状态
    * @param index number 需要修改的作者在列表的下标
@@ -155,7 +173,7 @@ class Home extends Component {
   };
 
   render() {
-    const { articles, authors, browsingHistory } = this.state;
+    const { articles, authors, browsingHistory, recommends} = this.state;
     // const isResult = this.props.match.path.includes('result') ? true : false;
     const isLogin = window.$isLogin;
     return (
@@ -167,7 +185,7 @@ class Home extends Component {
         />
         <div className={styles.container}>
           <div className={styles.containerLeft}>
-            {articles && articles.map(article => this.article(article))}
+            {recommends && recommends.map(recommends => this.recommends(recommends))}
             <Button className={styles.more}>Read More</Button>
           </div>
           <div className={styles.containerRight}>

@@ -257,14 +257,23 @@ app.get('/follows/delete', (req, res) => {
 });
 
 //Runs Python script with input (author_id)
-app.get('/recommendations/select', (req, res) => {
+app.get('/recommendations/insert', (req, res) => {
     const {username} = req.query;
     const SELECT_FOLLOWING_QUERY = `SELECT author_id, name FROM Author WHERE author_id IN (SELECT author_id FROM Follows NATURAL JOIN Account GROUP BY author_id HAVING username='${username}')`;
     const SELECT_SURVEY_QUERY = `SELECT medicine, science, math, engineering FROM Account WHERE username='${username}'`;
+    const DELETE_QUERY = `DELETE FROM Recommendation WHERE username='${username}'`;
     var author_ids = [];
     var surveyResults = [];
     var test = 'hello';
 
+    db.get(DELETE_QUERY, function(err, results) {
+      if(err){
+        return console.log(err.message);
+      }
+      else{
+        console.log('Recommendation cleared');
+      }
+    });
     db.get(SELECT_FOLLOWING_QUERY, function(err, results) {
         //Write to a file using f.writeFile(filename, results)
         if (err) {
@@ -303,13 +312,33 @@ app.get('/recommendations/select', (req, res) => {
             return console.log(err.message);
         }
         console.log('results: %j', results);
+        for(i=0; i<10; i++){
+          INSERT_QUERY = `INSERT INTO Recommendation(paper_id, title, username) VALUES('${results[i*3]}','${results[i*3+1]}','${username}')`;
+          db.get(INSERT_QUERY, function(err1, results1){
+            if(err1) {
+              return console.log(err1.message);
+            }
+            else{
+              console.log('inserted baby');
+            }
+          });
+        }
     });
-});
-
-app.get('/recommendations/update', (req, res) => {
 
 });
 
+app.get('/recommendations/select', (req, res) => {
+  const {username} = req.query;
+  SELECT_QUERY = `SELECT * FROM Recommendation WHERE username='${username}'`;
+  db.all(SELECT_QUERY, function(err1, results1){
+    if(err1){
+      return console.log(err1.message);
+    }
+    else{
+      console.log(results1)
+    }
+  });
+});
 app.get('/', (req, res) => {
 	res.send('hello from the sequitur server')
 });
